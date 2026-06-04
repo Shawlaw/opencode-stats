@@ -12,7 +12,7 @@ pub fn default_database_candidates(custom_path: Option<&Path>) -> Vec<PathBuf> {
         candidates.push(path.to_path_buf());
     }
 
-    if let Ok(path) = env::var("OCMONITOR_DATABASE_FILE") {
+    if let Ok(path) = env::var("OC_STATS_DB_PATH") {
         candidates.push(PathBuf::from(path));
     }
 
