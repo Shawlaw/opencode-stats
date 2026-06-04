@@ -1,7 +1,7 @@
 use std::env;
 use std::path::{Path, PathBuf};
 
-use rusqlite::Connection;
+use rusqlite::{Connection, OpenFlags};
 
 use crate::db::errors::{Error, Result};
 
@@ -61,11 +61,13 @@ pub fn discover_database_path(custom_path: Option<&Path>) -> Option<PathBuf> {
 }
 
 pub fn open_database(path: &Path) -> Result<Connection> {
-    Connection::open(path).map_err(|e| Error::database_open(path, e))
+    Connection::open_with_flags(path, OpenFlags::SQLITE_OPEN_READ_ONLY)
+        .map_err(|e| Error::database_open(path, e))
 }
 
 pub fn database_has_expected_tables(path: &Path) -> Result<bool> {
-    let conn = Connection::open(path).map_err(|e| Error::database_open(path, e))?;
+    let conn = Connection::open_with_flags(path, OpenFlags::SQLITE_OPEN_READ_ONLY)
+        .map_err(|e| Error::database_open(path, e))?;
 
     for table in ["session", "message", "project"] {
         let exists = conn

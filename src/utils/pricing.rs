@@ -10,6 +10,16 @@ pub enum ZeroCostBehavior {
     KeepZero,
 }
 
+impl ZeroCostBehavior {
+    pub fn from_ignore_zero(flag: bool) -> Self {
+        if flag {
+            ZeroCostBehavior::EstimateWhenZero
+        } else {
+            ZeroCostBehavior::KeepZero
+        }
+    }
+}
+
 #[derive(Clone, Debug, Default)]
 pub struct PriceSummary {
     pub known: Decimal,
