@@ -73,9 +73,9 @@ fn map_intensity(tokens: u64, max: u64) -> u8 {
         0
     } else {
         let ratio = tokens as f64 / max as f64;
-        if ratio < 0.15 {
+        if ratio < 0.25 {
             1
-        } else if ratio < 0.4 {
+        } else if ratio < 0.5 {
             2
         } else if ratio < 0.75 {
             3
