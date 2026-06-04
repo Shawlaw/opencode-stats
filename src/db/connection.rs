@@ -87,13 +87,10 @@ pub fn database_has_expected_tables(path: &Path) -> Result<bool> {
 
 fn dedupe_preserve_order(paths: Vec<PathBuf>) -> Vec<PathBuf> {
     let mut seen = std::collections::HashSet::new();
-    let mut result = Vec::new();
-    for path in paths {
-        if seen.insert(path.clone()) {
-            result.push(path);
-        }
-    }
-    result
+    paths
+        .into_iter()
+        .filter(|path| seen.insert(path.clone()))
+        .collect()
 }
 
 #[cfg(test)]
