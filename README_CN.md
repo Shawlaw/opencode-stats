@@ -28,6 +28,8 @@
 - 提供全部时间、最近 7 天、最近 30 天三种统计范围
 - 内置最近 365 天活跃热力图，便于观察长期使用趋势
 - 支持亮色 / 暗色主题启动参数
+- 支持非交互式 `snapshot` 输出，可生成终端字符画或 PNG 图片，并按时间范围、每日或模型维度筛选
+- 每日 snapshot 图表和模型 / 提供商图表显示精确 token 数值
 - 支持将当前页面复制到剪贴板：优先导出图片分享卡片，失败时自动降级为文本摘要
 - 支持本地缓存模型价格数据，并提供缓存更新 / 清理命令
 - 输出数据统计方式和 `opencode stats` 和 `opencode stats --models` 的输出对齐，保持数据一致
@@ -128,6 +130,42 @@ oc-stats --theme light
 oc-stats --ignore-zero
 ```
 
+### 直接输出 Snapshot
+
+`snapshot` 子命令不会启动交互式界面。默认使用 `terminal` 格式，立刻将完整快照以字符画输出到标准输出，便于重定向、保存或在脚本中使用。快照包含概览、逐日精确 token 图表、模型统计和提供商统计。
+
+```bash
+oc-stats snapshot
+```
+
+指定时间范围：
+
+```bash
+oc-stats snapshot --range 7d
+oc-stats snapshot --range 30d
+oc-stats snapshot --range all
+```
+
+只输出每日图表或模型维度数据：
+
+```bash
+oc-stats snapshot --range 7d --daily
+oc-stats snapshot --range 7d --model
+```
+
+保存为 PNG 图片时，使用 `--format image --output`；图片会渲染与终端相同的字符画内容和精确数值。输出路径必须以 `.png` 结尾。
+
+```bash
+oc-stats snapshot --range 7d --daily --format image --output usage-7d.png
+oc-stats snapshot --range all --format image --output usage.png --theme dark
+```
+
+`--format terminal`（也接受 `ascii`）可显式指定终端字符画，`--all` 可显式请求完整快照（也是默认值）。每日图表的每一行都会输出日期、精确 token 数和按相对大小绘制的柱形；模型和提供商的 token 列同样不做 K/M 缩写。输入参数也可直接放在子命令后面：
+
+```bash
+oc-stats snapshot --json /path/to/export.json --range 7d --daily
+```
+
 ### 缓存管理命令
 
 查看本地价格缓存路径：
@@ -206,6 +244,7 @@ oc-stats cache clean
 - 想按模型或提供商分析使用偏好
 - 想了解最近一周、一个月或长期使用趋势
 - 想将统计结果导出为图片或文本，便于分享
+- 想在 CI、shell 脚本或重定向文件中获取精确的使用快照
 
 ## License
 

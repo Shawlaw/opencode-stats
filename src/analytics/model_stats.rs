@@ -53,6 +53,7 @@ pub struct ModelChartData {
     pub y_bounds: [f64; 2],
     pub x_labels: Vec<String>,
     pub y_labels: Vec<String>,
+    pub days: Vec<NaiveDate>,
     pub series: Vec<ModelChartSeries>,
 }
 
@@ -233,6 +234,7 @@ pub fn chart_with_focus(chart: &ModelChartData, focused_model_id: Option<&str>) 
         y_bounds: chart.y_bounds,
         x_labels: chart.x_labels.clone(),
         y_labels: chart.y_labels.clone(),
+        days: chart.days.clone(),
         series,
     }
 }
@@ -281,6 +283,7 @@ where
             y_bounds: [0.0, 1.0],
             x_labels: vec!["Start".to_string(), "End".to_string()],
             y_labels: vec!["0".to_string(), "1".to_string()],
+            days: Vec::new(),
             series: Vec::new(),
         };
     }
@@ -328,6 +331,7 @@ where
         y_bounds,
         x_labels,
         y_labels,
+        days,
         series,
     }
 }
@@ -414,13 +418,7 @@ fn nice_step(rough_step: f64) -> f64 {
 }
 
 fn format_tick_label(value: f64) -> String {
-    if value >= 1_000_000.0 {
-        format!("{:.0}M", value / 1_000_000.0)
-    } else if value >= 1_000.0 {
-        format!("{:.0}K", value / 1_000.0)
-    } else {
-        format!("{value:.0}")
-    }
+    crate::utils::formatting::format_exact_tokens(value.round().max(0.0) as u64)
 }
 
 #[derive(Default)]

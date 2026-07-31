@@ -7,11 +7,13 @@ use ratatui::widgets::Paragraph;
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 
 use crate::analytics::AnalyticsSnapshot;
-use crate::analytics::model_stats::{ModelUsageRow, ProviderUsageRow, chart_with_focus};
+use crate::analytics::model_stats::{
+    ModelChartData, ModelUsageRow, ProviderUsageRow, chart_with_focus,
+};
 use crate::ui::theme::Theme;
 use crate::ui::widgets::common::{metric_line, truncate_label};
 use crate::ui::widgets::linechart::build_chart;
-use crate::utils::formatting::{format_price_summary, format_tokens};
+use crate::utils::formatting::{format_exact_tokens, format_price_summary, format_tokens};
 use crate::utils::time::TimeRange;
 
 #[derive(Clone, Debug)]
@@ -189,9 +191,16 @@ pub fn render_models(
         focused_row.map(|row| row.model_id.as_str()),
     );
     frame.render_widget(build_chart(&chart_data, theme), chart_area);
+    frame.render_widget(
+        Paragraph::new(chart_value_line(
+            &chart_data,
+            focused_row.map(|row| row.model_id.as_str()),
+            theme,
+        )),
+        spacer1,
+    );
 
     if let Some(search) = search {
-        frame.render_widget(Paragraph::new(""), spacer1);
         render_search_overlay(
             frame,
             header_area,
@@ -356,9 +365,16 @@ pub fn render_providers(
         focused_row.map(|row| row.provider_id.as_str()),
     );
     frame.render_widget(build_chart(&chart_data, theme), chart_area);
+    frame.render_widget(
+        Paragraph::new(chart_value_line(
+            &chart_data,
+            focused_row.map(|row| row.provider_id.as_str()),
+            theme,
+        )),
+        spacer1,
+    );
 
     if let Some(search) = search {
-        frame.render_widget(Paragraph::new(""), spacer1);
         render_search_overlay(
             frame,
             header_area,
@@ -387,6 +403,54 @@ pub fn render_providers(
             detail_area,
         );
     }
+}
+
+fn chart_value_line(
+    chart: &ModelChartData,
+    focused_id: Option<&str>,
+    theme: &Theme,
+) -> Line<'static> {
+    let Some(focused_id) = focused_id else {
+        return Line::from(Span::styled("No chart values", theme.muted_style()));
+    };
+    let Some(series) = chart
+        .series
+        .iter()
+        .find(|series| series.model_id == focused_id)
+    else {
+        return Line::from(Span::styled("No chart values", theme.muted_style()));
+    };
+
+    let values = chart
+        .days
+        .iter()
+        .zip(&series.points)
+        .filter_map(|(date, (_, value))| (*value > 0.0).then_some((*date, *value as u64)))
+        .collect::<Vec<_>>();
+    let Some((latest_date, latest_value)) = values.last() else {
+        return Line::from(Span::styled("Exact values: 0 tokens", theme.muted_style()));
+    };
+    let (peak_date, peak_value) = values
+        .iter()
+        .copied()
+        .max_by_key(|(_, value)| *value)
+        .expect("non-empty chart values have a peak");
+
+    Line::from(vec![
+        Span::styled("Exact tokens — ", theme.muted_style()),
+        Span::raw(format!(
+            "latest {}: {}",
+            latest_date.format("%m/%d"),
+            format_exact_tokens(*latest_value)
+        )),
+        Span::styled(" | ", theme.muted_style()),
+        Span::raw(format!(
+            "peak {}: {}",
+            peak_date.format("%m/%d"),
+            format_exact_tokens(peak_value)
+        )),
+        Span::styled(" | snapshot --daily", theme.muted_style()),
+    ])
 }
 
 fn focus_provider_line(

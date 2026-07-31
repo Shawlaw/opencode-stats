@@ -28,6 +28,8 @@ A terminal dashboard for OpenCode usage statistics.
 - Supports three time ranges: all time, last 7 days, and last 30 days
 - Built-in 365-day activity heatmap for observing long-term usage trends
 - Supports dark / light theme via command-line argument
+- Non-interactive `snapshot` output as terminal ASCII art or PNG, with time-range, daily, and model filters
+- Exact token values in daily snapshots and model/provider charts
 - Copy current view to clipboard: prioritize image export (share card), with automatic fallback to text summary
 - Local model pricing cache with update / clean commands
 - Output data calculation aligns with `opencode stats` and `opencode stats --models` for consistency
@@ -128,6 +130,42 @@ By default, `oc-stats` keeps stored costs as-is, including `cost: 0`, to preserv
 oc-stats --ignore-zero
 ```
 
+### Print a snapshot directly
+
+The `snapshot` subcommand skips the interactive UI. Its default `terminal` format immediately writes a complete ASCII-art snapshot to standard output, making it suitable for redirection and scripts. The snapshot includes an overview, exact per-day token chart, model usage, and provider usage.
+
+```bash
+oc-stats snapshot
+```
+
+Choose a time range:
+
+```bash
+oc-stats snapshot --range 7d
+oc-stats snapshot --range 30d
+oc-stats snapshot --range all
+```
+
+Print only the daily chart or model breakdown:
+
+```bash
+oc-stats snapshot --range 7d --daily
+oc-stats snapshot --range 7d --model
+```
+
+To save a PNG image, use `--format image --output`. The image renders the same ASCII-art content and exact values as the terminal output. The output path must end in `.png`.
+
+```bash
+oc-stats snapshot --range 7d --daily --format image --output usage-7d.png
+oc-stats snapshot --range all --format image --output usage.png --theme dark
+```
+
+`--format terminal` (also accepted as `ascii`) explicitly selects terminal ASCII art, while `--all` explicitly requests the complete snapshot (and is the default). Every daily-chart row includes its date, exact token count, and a proportional bar; model and provider token totals are likewise not abbreviated to K/M. Input options can appear after the subcommand too:
+
+```bash
+oc-stats snapshot --json /path/to/export.json --range 7d --daily
+```
+
 ### Cache management commands
 
 View the local pricing cache path:
@@ -206,6 +244,7 @@ If the database stores `cost: 0` for a nonzero-token response, `oc-stats` keeps 
 - Analyze usage preferences by model or provider
 - Understand recent and long-term usage trends
 - Export statistics as images or text for easy sharing
+- Retrieve exact usage snapshots from CI, shell scripts, or redirected output
 
 ## License
 

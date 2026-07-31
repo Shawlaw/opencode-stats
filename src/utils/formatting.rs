@@ -11,6 +11,22 @@ pub fn format_tokens(value: u64) -> String {
     }
 }
 
+/// Formats a token count without rounding so charts and text snapshots can
+/// expose the exact value behind a compact visual representation.
+pub fn format_exact_tokens(value: u64) -> String {
+    let digits = value.to_string();
+    let mut result = String::with_capacity(digits.len() + digits.len() / 3);
+
+    for (index, digit) in digits.chars().enumerate() {
+        if index > 0 && (digits.len() - index).is_multiple_of(3) {
+            result.push(',');
+        }
+        result.push(digit);
+    }
+
+    result
+}
+
 pub fn format_usd_precise(value: Decimal) -> String {
     if value >= Decimal::ONE {
         format!("${:.2}", value.round_dp(2))
@@ -112,5 +128,17 @@ pub fn percentage(part: u64, total: u64) -> f64 {
         0.0
     } else {
         (part as f64 / total as f64) * 100.0
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::format_exact_tokens;
+
+    #[test]
+    fn formats_exact_token_values_with_grouping() {
+        assert_eq!(format_exact_tokens(0), "0");
+        assert_eq!(format_exact_tokens(999), "999");
+        assert_eq!(format_exact_tokens(12_345_678), "12,345,678");
     }
 }

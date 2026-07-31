@@ -8,7 +8,7 @@ use std::collections::BTreeSet;
 
 use chrono::NaiveDate;
 
-use crate::analytics::daily::aggregate_daily;
+use crate::analytics::daily::{DailyUsage, aggregate_daily};
 use crate::analytics::heatmap_data::{HeatmapData, build_heatmap_data};
 use crate::analytics::model_stats::{
     ModelChartData, ModelUsageRow, ProviderUsageRow, build_model_chart, build_provider_chart,
@@ -38,6 +38,8 @@ pub struct OverviewStats {
 #[derive(Clone, Debug)]
 pub struct AnalyticsSnapshot {
     pub overview: OverviewStats,
+    /// Exact per-day aggregates used by the non-interactive snapshot output.
+    pub daily: Vec<DailyUsage>,
     pub models: Vec<ModelUsageRow>,
     pub chart: ModelChartData,
     pub providers: Vec<ProviderUsageRow>,
@@ -130,6 +132,7 @@ pub fn build_snapshot(
                 input_tokens + output_tokens,
             ),
         },
+        daily,
         models,
         chart,
         providers,
