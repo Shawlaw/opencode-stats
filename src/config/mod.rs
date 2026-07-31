@@ -5,7 +5,7 @@ pub mod errors;
 pub mod theme_config;
 
 pub fn config_root() -> Option<PathBuf> {
-    dirs::config_dir().map(|path| path.join("oc-stats"))
+    dirs::config_dir().map(|path| path.join("shaw-oc-stats"))
 }
 
 pub fn config_path() -> Option<PathBuf> {

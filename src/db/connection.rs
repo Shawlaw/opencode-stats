@@ -115,7 +115,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let db_path = std::env::temp_dir().join(format!("oc-stats-schema-test-{nonce}.db"));
+        let db_path = std::env::temp_dir().join(format!("shaw-oc-stats-schema-test-{nonce}.db"));
         let conn = Connection::open(&db_path).unwrap();
         conn.execute("CREATE TABLE only_one(id INTEGER)", [])
             .unwrap();

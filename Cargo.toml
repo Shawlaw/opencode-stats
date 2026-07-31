@@ -1,17 +1,18 @@
 [package]
-name = "opencode-stats"
-description = "A terminal dashboard for OpenCode usage statistics inspired by the /stats command in Claude Code"
-version = "1.4.2"
+name = "shaw-opencode-stats"
+description = "A maintained fork of OpenCode Stats, a terminal dashboard for OpenCode usage statistics"
+version = "1.4.2-shawlaw.1"
 edition = "2024"
-authors = ["Cateds <this.id.was.used@outlook.com>"]
+authors = ["Shawlaw <shawlaw@126.com>"]
 license = "MIT"
-repository = "https://github.com/Cateds/opencode-stats"
+repository = "https://github.com/Shawlaw/opencode-stats"
+publish = false
 categories = ["command-line-utilities", "visualization"]
 keywords = ["opencode", "cli", "tui", "dashboard", "statistics"]
 readme = "README.md"
 
 [[bin]]
-name = "oc-stats"
+name = "shaw-oc-stats"
 path = "src/main.rs"
 
 [dependencies]

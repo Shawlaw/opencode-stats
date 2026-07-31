@@ -9,7 +9,11 @@ const REQUEST_TIMEOUT: Duration = Duration::from_secs(30);
 
 pub async fn fetch_json(url: &str) -> Result<Value> {
     let client = reqwest::Client::builder()
-        .user_agent("oc-stats/0.1")
+        .user_agent(concat!(
+            env!("CARGO_PKG_NAME"),
+            "/",
+            env!("CARGO_PKG_VERSION")
+        ))
         .connect_timeout(CONNECT_TIMEOUT)
         .timeout(REQUEST_TIMEOUT)
         .build()

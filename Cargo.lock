@@ -2468,39 +2468,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 
 [[package]]
-name = "opencode-stats"
-version = "1.4.2"
-dependencies = [
- "ab_glyph",
- "arboard",
- "chrono",
- "clap",
- "clap_complete",
- "color-eyre",
- "colored",
- "crossterm",
- "dirs",
- "futures",
- "image",
- "imageproc",
- "itertools",
- "json5",
- "nucleo-matcher",
- "ratatui",
- "reqwest",
- "rusqlite",
- "rust_decimal",
- "serde",
- "serde_json",
- "terminal-light",
- "thiserror 2.0.18",
- "tiny-skia",
- "tokio",
- "toml",
- "unicode-width",
-]
-
-[[package]]
 name = "openssl-probe"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3614,6 +3581,39 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f40ca3c46823713e0d4209592e8d6e826aa57e928f09752619fc696c499637f6"
 dependencies = [
  "lazy_static",
+]
+
+[[package]]
+name = "shaw-opencode-stats"
+version = "1.4.2-shawlaw.1"
+dependencies = [
+ "ab_glyph",
+ "arboard",
+ "chrono",
+ "clap",
+ "clap_complete",
+ "color-eyre",
+ "colored",
+ "crossterm",
+ "dirs",
+ "futures",
+ "image",
+ "imageproc",
+ "itertools",
+ "json5",
+ "nucleo-matcher",
+ "ratatui",
+ "reqwest",
+ "rusqlite",
+ "rust_decimal",
+ "serde",
+ "serde_json",
+ "terminal-light",
+ "thiserror 2.0.18",
+ "tiny-skia",
+ "tokio",
+ "toml",
+ "unicode-width",
 ]
 
 [[package]]

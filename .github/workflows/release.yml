@@ -21,8 +21,7 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
-  BIN_NAME: oc-stats
-  PACKAGE_NAME: opencode-stats
+  BIN_NAME: shaw-oc-stats
 
 jobs:
   build-linux:
@@ -33,11 +32,11 @@ jobs:
       matrix:
         include:
           - target: x86_64-unknown-linux-gnu
-            artifact_name: oc-stats-x86_64-unknown-linux-gnu
-            archive_name: oc-stats-x86_64-unknown-linux-gnu.tar.gz
+            artifact_name: shaw-oc-stats-x86_64-unknown-linux-gnu
+            archive_name: shaw-oc-stats-x86_64-unknown-linux-gnu.tar.gz
           - target: x86_64-unknown-linux-musl
-            artifact_name: oc-stats-x86_64-unknown-linux-musl
-            archive_name: oc-stats-x86_64-unknown-linux-musl.tar.gz
+            artifact_name: shaw-oc-stats-x86_64-unknown-linux-musl
+            archive_name: shaw-oc-stats-x86_64-unknown-linux-musl.tar.gz
     steps:
       - uses: actions/checkout@v4
         with:
@@ -95,12 +94,12 @@ jobs:
         run: |
           mkdir -p dist
           cp "target/${{ matrix.target }}/release/${BIN_NAME}" "dist/${BIN_NAME}"
-          tar -C dist -czf "dist/oc-stats-${{ matrix.target }}.tar.gz" "${BIN_NAME}"
+          tar -C dist -czf "dist/shaw-oc-stats-${{ matrix.target }}.tar.gz" "${BIN_NAME}"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: oc-stats-${{ matrix.target }}
-          path: dist/oc-stats-${{ matrix.target }}.tar.gz
+          name: shaw-oc-stats-${{ matrix.target }}
+          path: dist/shaw-oc-stats-${{ matrix.target }}.tar.gz
           if-no-files-found: error
 
   build-windows:
@@ -123,46 +122,22 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path dist | Out-Null
           Copy-Item "target/x86_64-pc-windows-msvc/release/${env:BIN_NAME}.exe" "dist/${env:BIN_NAME}.exe"
-          Compress-Archive -Path "dist/${env:BIN_NAME}.exe" -DestinationPath "dist/oc-stats-x86_64-pc-windows-msvc.zip" -Force
+          Compress-Archive -Path "dist/${env:BIN_NAME}.exe" -DestinationPath "dist/shaw-oc-stats-x86_64-pc-windows-msvc.zip" -Force
 
       - uses: actions/upload-artifact@v4
         with:
-          name: oc-stats-x86_64-pc-windows-msvc
-          path: dist/oc-stats-x86_64-pc-windows-msvc.zip
+          name: shaw-oc-stats-x86_64-pc-windows-msvc
+          path: dist/shaw-oc-stats-x86_64-pc-windows-msvc.zip
           if-no-files-found: error
-
-  publish-crates:
-    name: Publish crate
-    needs: [build-linux, build-macos, build-windows]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
-
-      - uses: dtolnay/rust-toolchain@stable
-
-      - name: Ensure crates.io token is configured
-        shell: bash
-        run: |
-          if [ -z "${{ secrets.CRATES_IO_TOKEN }}" ]; then
-            echo "CRATES_IO_TOKEN secret is not configured."
-            exit 1
-          fi
-
-      - name: Publish to crates.io
-        run: cargo publish --locked --token ${{ secrets.CRATES_IO_TOKEN }}
 
   release:
     name: Create GitHub release
-    needs: [build-linux, build-macos, build-windows, publish-crates]
+    needs: [build-linux, build-macos, build-windows]
     if: |
       always() &&
       needs.build-linux.result == 'success' &&
       needs.build-macos.result == 'success' &&
-      needs.build-windows.result == 'success' &&
-      (needs.publish-crates.result == 'success' || needs.publish-crates.result == 'skipped')
+      needs.build-windows.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -192,7 +167,6 @@ jobs:
           CURRENT_TAG: ${{ steps.tags.outputs.current }}
           PREVIOUS_TAG: ${{ steps.tags.outputs.previous }}
           BIN_NAME: ${{ env.BIN_NAME }}
-          PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
         with:
           script: |
             const fs = require('node:fs');
@@ -336,7 +310,6 @@ jobs:
             const body = [
               '## Install',
               '',
-              `- From crates.io: \`cargo install ${process.env.PACKAGE_NAME}\``,
               `- Installed command: \`${process.env.BIN_NAME}\``,
               '- From GitHub: download the archive for your platform from the assets below',
               '',

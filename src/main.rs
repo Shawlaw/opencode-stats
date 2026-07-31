@@ -53,7 +53,7 @@ async fn main() -> Result<()> {
 }
 
 #[derive(Debug, Parser)]
-#[command(name = "oc-stats")]
+#[command(name = "shaw-oc-stats")]
 #[command(version, about)]
 struct CliArgs {
     #[command(subcommand)]
@@ -134,7 +134,7 @@ enum Command {
         #[command(subcommand)]
         action: CacheCommand,
     },
-    #[command(about = "Generate shell completions for oc-stats")]
+    #[command(about = "Generate shell completions for shaw-oc-stats")]
     Completions {
         #[arg(value_enum)]
         shell: Shell,
@@ -388,7 +388,7 @@ mod tests {
     #[test]
     fn parses_a_daily_seven_day_snapshot_with_input_after_the_subcommand() {
         let cli = CliArgs::try_parse_from([
-            "oc-stats",
+            "shaw-oc-stats",
             "snapshot",
             "--json",
             "/tmp/export.json",
@@ -415,7 +415,7 @@ mod tests {
     #[test]
     fn parses_an_image_snapshot_destination() {
         let cli = CliArgs::try_parse_from([
-            "oc-stats",
+            "shaw-oc-stats",
             "snapshot",
             "--format",
             "image",

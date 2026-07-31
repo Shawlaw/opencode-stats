@@ -131,7 +131,7 @@ pub fn default_cache_path() -> Result<PathBuf> {
     let Some(cache_dir) = dirs::cache_dir() else {
         return Err(Error::CacheDirNotFound);
     };
-    Ok(cache_dir.join("oc-stats").join("models.json"))
+    Ok(cache_dir.join("shaw-oc-stats").join("models.json"))
 }
 
 pub async fn refresh_remote_models(

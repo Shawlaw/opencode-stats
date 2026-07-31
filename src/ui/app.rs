@@ -519,7 +519,7 @@ impl App {
     fn current_page_summary(&self) -> String {
         match self.page {
             Page::Overview => format!(
-                "oc-stats {}\nTokens: {}\nCost: {}\nSessions: {}\nMessages: {}\nPrompts: {}",
+                "shaw-oc-stats {}\nTokens: {}\nCost: {}\nSessions: {}\nMessages: {}\nPrompts: {}",
                 self.range.label(),
                 self.snapshot.overview.total_tokens,
                 format_price_summary(&self.snapshot.overview.total_cost),

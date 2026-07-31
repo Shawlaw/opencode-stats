@@ -1,4 +1,4 @@
-<h1 align="center">OpenCode Stats</h1>
+<h1 align="center">Shaw OpenCode Stats</h1>
 
 <p align="center">
   <a href="https://ratatui.rs/"><img src="https://img.shields.io/badge/Built_With_Ratatui-000?logo=ratatui&logoColor=fff" alt="Built With Ratatui"></a>
@@ -9,11 +9,11 @@
   <a href="./README_CN.md">中文</a>
 </p>
 
-一个面向 OpenCode 使用数据的终端统计面板。
+一个长期维护的 OpenCode Stats fork：面向 OpenCode 使用数据的终端统计面板。
 
 <img src="images/overview.png" alt="screenshot" style="zoom:50%;" />
 
-`oc-stats` 会读取 OpenCode 本地 SQLite 数据库或 JSON 导出文件，在终端中展示 token 使用量、成本估算、模型与提供商分布，以及最近 365 天的活跃热力图。它参考了 Claude Code `/stats` 的使用体验，但以本地可运行、可导出、可分享为目标做了独立实现。
+`shaw-oc-stats` 会读取 OpenCode 本地 SQLite 数据库或 JSON 导出文件，在终端中展示 token 使用量、成本估算、模型与提供商分布，以及最近 365 天的活跃热力图。它参考了 Claude Code `/stats` 的使用体验，但以本地可运行、可导出、可分享为目标做了独立实现。
 
 > 如果你已经在使用 OpenCode，并希望快速看清自己的调用量、成本和活跃趋势，这个工具可以直接上手。
 >
@@ -36,7 +36,7 @@
 
 ## 预览
 
-OpenCode Stats 提供了三种数据预览视角：
+Shaw OpenCode Stats 提供了三种数据预览视角：
 
 | 年视图                                                        | 模型使用                                                    | 提供商使用                                                        |
 | ------------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
@@ -48,21 +48,9 @@ OpenCode Stats 提供了三种数据预览视角：
 
 ## 安装
 
-### 通过 crates.io 安装
-
-```bash
-cargo install opencode-stats
-```
-
-安装后直接运行：
-
-```bash
-oc-stats
-```
-
 ### 从 GitHub Release 下载预编译二进制
 
-在 Releases 页面下载对应平台的压缩包，解压后直接运行 `oc-stats`。
+在 Releases 页面下载对应平台的压缩包，解压后直接运行 `shaw-oc-stats`。
 
 当前 Release 工作流会构建以下平台：
 
@@ -75,7 +63,7 @@ oc-stats
 ### 从源码构建
 
 ```bash
-git clone https://github.com/Cateds/opencode-stats.git
+git clone https://github.com/Shawlaw/opencode-stats.git
 cd opencode-stats
 cargo build --release
 ```
@@ -83,13 +71,13 @@ cargo build --release
 生成的可执行文件位于：
 
 ```bash
-target/release/oc-stats
+target/release/shaw-oc-stats
 ```
 
 或者直接使用 git 路径构建
 
 ```bash
-cargo install --git https://github.com/Cateds/opencode-stats.git
+cargo install --git https://github.com/Shawlaw/opencode-stats.git
 ```
 
 ## 使用方法
@@ -99,35 +87,35 @@ cargo install --git https://github.com/Cateds/opencode-stats.git
 默认情况下，程序会自动寻找 OpenCode 本地数据库并加载数据：
 
 ```bash
-oc-stats
+shaw-oc-stats
 ```
 
 ### 指定数据库路径
 
 ```bash
-oc-stats --db /path/to/opencode.db
+shaw-oc-stats --db /path/to/opencode.db
 ```
 
 ### 指定 JSON 导出文件
 
 ```bash
-oc-stats --json /path/to/export.json
+shaw-oc-stats --json /path/to/export.json
 ```
 
 ### 指定主题
 
 ```bash
-oc-stats --theme auto
-oc-stats --theme dark
-oc-stats --theme light
+shaw-oc-stats --theme auto
+shaw-oc-stats --theme dark
+shaw-oc-stats --theme light
 ```
 
 ### 忽略占位用的零成本
 
-默认情况下，`oc-stats` 会保持数据库里记录的成本值，包括 `cost: 0`，以兼容现有行为。如果你的 OpenCode 环境会把仍然有 token 消耗的响应写成 `cost: 0` 占位值，可以使用 `--ignore-zero` 将这些零值视为缺失成本并改为估算。
+默认情况下，`shaw-oc-stats` 会保持数据库里记录的成本值，包括 `cost: 0`，以兼容现有行为。如果你的 OpenCode 环境会把仍然有 token 消耗的响应写成 `cost: 0` 占位值，可以使用 `--ignore-zero` 将这些零值视为缺失成本并改为估算。
 
 ```bash
-oc-stats --ignore-zero
+shaw-oc-stats --ignore-zero
 ```
 
 ### 直接输出 Snapshot
@@ -135,35 +123,35 @@ oc-stats --ignore-zero
 `snapshot` 子命令不会启动交互式界面。默认使用 `terminal` 格式，立刻将完整快照以字符画输出到标准输出，便于重定向、保存或在脚本中使用。快照包含概览、逐日精确 token 图表、模型统计和提供商统计。
 
 ```bash
-oc-stats snapshot
+shaw-oc-stats snapshot
 ```
 
 指定时间范围：
 
 ```bash
-oc-stats snapshot --range 7d
-oc-stats snapshot --range 30d
-oc-stats snapshot --range all
+shaw-oc-stats snapshot --range 7d
+shaw-oc-stats snapshot --range 30d
+shaw-oc-stats snapshot --range all
 ```
 
 只输出每日图表或模型维度数据：
 
 ```bash
-oc-stats snapshot --range 7d --daily
-oc-stats snapshot --range 7d --model
+shaw-oc-stats snapshot --range 7d --daily
+shaw-oc-stats snapshot --range 7d --model
 ```
 
 保存为 PNG 图片时，使用 `--format image --output`；图片会渲染与终端相同的字符画内容和精确数值。输出路径必须以 `.png` 结尾。
 
 ```bash
-oc-stats snapshot --range 7d --daily --format image --output usage-7d.png
-oc-stats snapshot --range all --format image --output usage.png --theme dark
+shaw-oc-stats snapshot --range 7d --daily --format image --output usage-7d.png
+shaw-oc-stats snapshot --range all --format image --output usage.png --theme dark
 ```
 
 `--format terminal`（也接受 `ascii`）可显式指定终端字符画，`--all` 可显式请求完整快照（也是默认值）。每日图表的每一行都会输出日期、精确 token 数和按相对大小绘制的柱形；模型和提供商的 token 列同样不做 K/M 缩写。输入参数也可直接放在子命令后面：
 
 ```bash
-oc-stats snapshot --json /path/to/export.json --range 7d --daily
+shaw-oc-stats snapshot --json /path/to/export.json --range 7d --daily
 ```
 
 ### 缓存管理命令
@@ -171,19 +159,19 @@ oc-stats snapshot --json /path/to/export.json --range 7d --daily
 查看本地价格缓存路径：
 
 ```bash
-oc-stats cache path
+shaw-oc-stats cache path
 ```
 
 更新本地价格缓存：
 
 ```bash
-oc-stats cache update
+shaw-oc-stats cache update
 ```
 
 清理本地价格缓存：
 
 ```bash
-oc-stats cache clean
+shaw-oc-stats cache clean
 ```
 
 ## 交互说明
@@ -213,7 +201,7 @@ oc-stats cache clean
 
 ### 数据输入
 
-`oc-stats` 支持两种输入来源：
+`shaw-oc-stats` 支持两种输入来源：
 
 - OpenCode 本地 SQLite 数据库
 - OpenCode 导出的 JSON 文件
@@ -228,7 +216,7 @@ oc-stats cache clean
 
 模型价格信息会优先从本地缓存读取，并在需要时从远程源刷新：
 
-- 本地缓存路径：`~/.cache/oc-stats/models.json`
+- 本地缓存路径：`~/.cache/shaw-oc-stats/models.json`
 - 远程来源：`https://models.dev/api.json`
 - 缓存有效期：1 小时
 

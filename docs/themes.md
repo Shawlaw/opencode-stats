@@ -1,15 +1,15 @@
 # Themes
 
-`oc-stats` supports built-in themes and user-defined themes loaded from the XDG config directory, or the platform-equivalent config directory on macOS and Windows.
+`shaw-oc-stats` supports built-in themes and user-defined themes loaded from the XDG config directory, or the platform-equivalent config directory on macOS and Windows.
 
-Theme files are optional. If you do not create any, `oc-stats` keeps using the built-in `dark` and `light` themes.
+Theme files are optional. If you do not create any, `shaw-oc-stats` keeps using the built-in `dark` and `light` themes.
 
 ## Theme Sources
 
 User themes are loaded from:
 
-- `~/.config/oc-stats/themes.toml`
-- `~/.config/oc-stats/themes/*.toml`
+- `~/.config/shaw-oc-stats/themes.toml`
+- `~/.config/shaw-oc-stats/themes/*.toml`
 
 Load order:
 
@@ -57,7 +57,7 @@ model = ["#BF616A", "#D08770", "#EBCB8B", "#A3BE8C", "#88C0D0", "#81A1C1", "#B48
 
 Use a single file when you want one theme per file:
 
-`~/.config/oc-stats/themes/paper.toml`
+`~/.config/shaw-oc-stats/themes/paper.toml`
 
 ```toml
 type = "light"
@@ -154,7 +154,7 @@ Unknown fields are rejected, so old or unused theme keys should be removed inste
 
 ## Connecting Themes To `config.toml`
 
-After defining custom themes, select them in `~/.config/oc-stats/config.toml`:
+After defining custom themes, select them in `~/.config/shaw-oc-stats/config.toml`:
 
 ```toml
 [theme]

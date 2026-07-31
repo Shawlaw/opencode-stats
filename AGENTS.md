@@ -18,7 +18,7 @@ Data flow: `db::queries::load_app_data` → `analytics::build_snapshot` → `ui:
 
 ### Pricing
 
-- Cache: `~/.cache/oc-stats/models.json` (TTL: 1 hour)
+- Cache: `~/.cache/shaw-oc-stats/models.json` (TTL: 1 hour)
 - Remote: `https://models.dev/api.json`
 - OpenCode config overrides take priority
 - Fallback: `cacheWrite = input`, `cacheRead = input * 0.1`
@@ -26,6 +26,6 @@ Data flow: `db::queries::load_app_data` → `analytics::build_snapshot` → `ui:
 
 ### Theme
 
-- Config: `~/.config/oc-stats/config.toml`
-- Index: `~/.config/oc-stats/themes.toml`
-- Overrides: `~/.config/oc-stats/themes/*.toml`
+- Config: `~/.config/shaw-oc-stats/config.toml`
+- Index: `~/.config/shaw-oc-stats/themes.toml`
+- Overrides: `~/.config/shaw-oc-stats/themes/*.toml`

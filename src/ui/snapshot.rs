@@ -18,7 +18,7 @@ use crate::utils::time::TimeRange;
 const DAILY_BAR_WIDTH: usize = 24;
 const TABLE_LABEL_WIDTH: usize = 24;
 
-/// The destination format emitted by `oc-stats snapshot`.
+/// The destination format emitted by `shaw-oc-stats snapshot`.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, ValueEnum)]
 pub enum SnapshotFormat {
     /// Print an ASCII-art snapshot directly to standard output.
@@ -30,7 +30,7 @@ pub enum SnapshotFormat {
     Image,
 }
 
-/// The section or sections emitted by `oc-stats snapshot`.
+/// The section or sections emitted by `shaw-oc-stats snapshot`.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, ValueEnum)]
 pub enum SnapshotView {
     /// A compact usage overview.

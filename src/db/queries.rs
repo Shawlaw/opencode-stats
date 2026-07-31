@@ -531,7 +531,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let db_path = std::env::temp_dir().join(format!("oc-stats-load-test-{nonce}.db"));
+        let db_path = std::env::temp_dir().join(format!("shaw-oc-stats-load-test-{nonce}.db"));
         let conn = Connection::open(&db_path).unwrap();
 
         conn.execute_batch(
